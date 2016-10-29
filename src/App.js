@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import moment from 'moment'
 import './App.css';
-import getPredictionsAndLocation, { STOPS } from './get_predictions'
+import getPredictionsAndLocation, {
+  STOPS,
+  EASTBOUND_PREFIX,
+  WESTBOUND_PREFIX
+} from './get_predictions'
 import Map from './Map'
 import Overlay from './Overlay'
 
@@ -21,7 +25,7 @@ class App extends Component {
 
   componentDidMount() {
     setInterval(this.updateLastUpdated.bind(this), 1000)
-    setInterval(this.updatePredictions.bind(this), 60*1000)
+    setInterval(this.updatePredictions.bind(this), 30*1000)
   }
 
   updateLastUpdated() {
@@ -57,10 +61,10 @@ class App extends Component {
       <div style={{ width: 480, height: 320, overflowX: 'hidden', position: 'relative' }}>
         {/* Absolute positioned layout, omg no stop */}
         <Overlay styles={{ top: 0, left: 0 }}>
-          320 NORTHBOUND at QUEEN
+          {STOPS[0].name}
         </Overlay>
         <Overlay styles={{ top: 0, left: 238 }}>
-          320 SOUTHBOUND at BALMORAL
+          {STOPS[1].name}
         </Overlay>
         <Overlay styles={{ bottom: 0, left: 0 }}>
           {this.formatPredictions(this.state.predictionE)}
@@ -77,10 +81,18 @@ class App extends Component {
         <Overlay styles={{ left: 238, top: 0, width: 2, height: 320, backgroundColor: 'black' }} />
 
         <div style={{ position: 'absolute', left: 0 }}>
-          <Map location={this.state.locationE} />
+          <Map
+            location={this.state.locationE}
+            eastPrefix={EASTBOUND_PREFIX}
+            westPrefix={WESTBOUND_PREFIX}
+          />
         </div>
         <div style={{ position: 'absolute', left: 238 }}>
-          <Map location={this.state.locationW} />
+          <Map
+            location={this.state.locationW}
+            eastPrefix={EASTBOUND_PREFIX}
+            westPrefix={WESTBOUND_PREFIX}
+          />
         </div>
       </div>
     )

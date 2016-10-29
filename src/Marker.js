@@ -3,15 +3,17 @@ import React from 'react'
 const WIDTH = 5
 const HEIGHT = 5
 
+const getLatLng = (o) => ({ lat: parseFloat(o.lat), lng: parseFloat(o.lon) })
+
 const style = {
   // initially any map object has left top corner at lat lng coordinates
   // it's on you to set object origin to 0,0 coordinates
   position: 'absolute',
-  width: WIDTH,
-  height: HEIGHT,
-  left: -WIDTH / 2,
-  top: -HEIGHT / 2,
-
+  // width: WIDTH,
+  // height: HEIGHT,
+  // left: -WIDTH / 2,
+  // top: -HEIGHT / 2,
+  //
   border: '1px solid #3f51b5',
   borderRadius: HEIGHT,
   backgroundColor: '#f44336',
@@ -20,6 +22,10 @@ const style = {
   padding: 4
 };
 
-const Marker = ({ children }) => <div style={style}>{children}</div>
+const Marker = ({ children }) => (
+  <div style={style}>
+    {children}
+  </div>
+)
 
 export default Marker

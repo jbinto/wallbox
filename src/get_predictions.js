@@ -1,36 +1,21 @@
 import _ from 'lodash'
 
-const LOCATION_URL = 'http://restbus.info/api/agencies/ttc/routes/320/vehicles'
-// export const STOPS = [
-//   {
-//     code: 'E',
-//     name: 'East',
-//     url: 'http://restbus.info/api/agencies/ttc/routes/85/stops/10133/predictions',
-//   },
-//   {
-//     code: 'W',
-//     name: 'West',
-//     url: 'http://restbus.info/api/agencies/ttc/routes/85/stops/9322/predictions',
-//   },
-// ]
-
+const LOCATION_URL = 'http://restbus.info/api/agencies/ttc/routes/85/vehicles'
 export const STOPS = [
   {
     code: 'E',
-    name: 'East',
-    url: 'http://restbus.info/api/agencies/ttc/routes/320/stops/8510/predictions',
-        // url: 'http://restbus.info/api/agencies/ttc/routes/85/stops/9322/predictions',
+    name: '85A SHEPPARD - EASTBOUND to BAYVIEW',
+    url: 'http://restbus.info/api/agencies/ttc/routes/85/stops/10133/predictions',
   },
   {
     code: 'W',
-    name: 'West',
-    url: 'http://restbus.info/api/agencies/ttc/routes/320/stops/3097/predictions',
-// url: 'http://restbus.info/api/agencies/ttc/routes/85/stops/9322/predictions',
+    name: '85A SHEPPARD - WESTBOUND to YONGE',
+    url: 'http://restbus.info/api/agencies/ttc/routes/85/stops/9322/predictions',
   },
 ]
 
-
-
+export const EASTBOUND_PREFIX = "85_0_"
+export const WESTBOUND_PREFIX = "85_1_"
 
 const getLocations = async () => {
   const response = await fetch(LOCATION_URL)
