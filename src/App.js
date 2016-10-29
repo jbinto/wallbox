@@ -1,21 +1,12 @@
 import React, { Component } from 'react';
 import moment from 'moment'
 import './App.css';
-
-
-const stops = [
-  { name: 'W', url: 'http://restbus.info/api/agencies/ttc/routes/85/stops/10133/predictions' },
-  { name: 'E', url: 'http://restbus.info/api/agencies/ttc/routes/85/stops/9322/predictions' },
-]
-
-// const getPrediction = async (url) => {
-//   const data = await fetch(url)
-//   return data
-// }
+import getPredictionsAndLocation, { STOPS } from './get_predictions'
+import Map from './Map'
+import Overlay from './Overlay'
 
 
 class App extends Component {
-
   constructor(props) {
     super(props)
     this.state = {
@@ -34,55 +25,66 @@ class App extends Component {
   }
 
   updateLastUpdated() {
-    console.log(this.state)
+    // console.log(this.state)
     const lastUpdated = this.state.lastUpdated
     this.setState({ lastUpdatedMessage:
-      lastUpdated.fromNow()
+      `${moment().diff(lastUpdated, 'seconds')}s ago`
     })
   }
 
-  updatePredictions() {
-    stops.forEach((stop, index) => {
-      fetch(stop.url)
-        .then(response => response.json())
-        .then(json => json[0])
-        .then(data => {
-          console.log(data)
-          const prediction = data['values'].map((v) => (
-            {
-              minutes: v.minutes,
-              seconds: v.seconds,
-              vehicle_id: v.vehicle.id,
-              title: v.direction.title,
-            }
-          ))
-          this.setState({ [`prediction${index}`]: prediction })
-
-          // bug: timers aren't independent
-          this.setState({ lastUpdated: moment() })
-        })
-    })
+  async updatePredictions() {
+    for (const stop of STOPS) {
+      const { predictions, location } = await getPredictionsAndLocation(stop.url)
+      console.log(location)
+      this.setState({ [`prediction${stop.code}`]: predictions })
+      this.setState({ [`location${stop.code}`]: location })
+      this.setLastUpdated()
+    }
   }
 
-  renderPredictions(predictions) {
+  setLastUpdated() {
+    this.setState({ lastUpdated: moment() })
+  }
+
+  formatPredictions(predictions) {
     if (predictions == null) return '?'
     const minutes = predictions.map(p => `${p.minutes}m`)
     return minutes.join(', ')
   }
 
-  lastUpdated() {
-    return this.state.lastUpdated.fromNow()
-  }
-
   render() {
     return (
-      <div className="App">
-        <p>WEST: {this.renderPredictions(this.state.prediction0)}</p>
-        <p>EAST: {this.renderPredictions(this.state.prediction1)}</p>
-        <p className="small">Last updated {this.state.lastUpdatedMessage}</p>
+      <div style={{ width: 480, height: 320, overflowX: 'hidden', position: 'relative' }}>
+        {/* Absolute positioned layout, omg no stop */}
+        <Overlay styles={{ top: 0, left: 0 }}>
+          320 NORTHBOUND at QUEEN
+        </Overlay>
+        <Overlay styles={{ top: 0, left: 238 }}>
+          320 SOUTHBOUND at BALMORAL
+        </Overlay>
+        <Overlay styles={{ bottom: 0, left: 0 }}>
+          {this.formatPredictions(this.state.predictionE)}
+        </Overlay>
+        <Overlay styles={{ bottom: 0, left: 238 }}>
+          {this.formatPredictions(this.state.predictionW)}
+        </Overlay>
+
+        <Overlay styles={{ bottom: 0, right: 0, width: 60, height: 20, fontSize: '0.5em' }}>
+          {this.state.lastUpdatedMessage}
+        </Overlay>
+
+        {/* Worst possible way to draw a vertical line. */}
+        <Overlay styles={{ left: 238, top: 0, width: 2, height: 320, backgroundColor: 'black' }} />
+
+        <div style={{ position: 'absolute', left: 0 }}>
+          <Map location={this.state.locationE} />
+        </div>
+        <div style={{ position: 'absolute', left: 238 }}>
+          <Map location={this.state.locationW} />
+        </div>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
