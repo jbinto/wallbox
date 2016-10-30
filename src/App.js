@@ -29,17 +29,19 @@ class App extends Component {
   }
 
   updateLastUpdated() {
-    // console.log(this.state)
-    const lastUpdated = this.state.lastUpdated
-    this.setState({ lastUpdatedMessage:
-      `${moment().diff(lastUpdated, 'seconds')}s ago`
-    })
+    const date = this.state.lastUpdated
+    const ago = moment().diff(date, 'seconds')
+    const text = `${ago}s ago`
+    const style = (ago > 30) ? { backgroundColor: 'red' } : {}
+    const component = (
+      <span style={style}>{text}</span>
+    )
+    this.setState({ lastUpdatedComponent: component })
   }
 
   async updatePredictions() {
     for (const stop of STOPS) {
       const { predictions, location } = await getPredictionsAndLocation(stop.url)
-      console.log(location)
       this.setState({ [`prediction${stop.code}`]: predictions })
       this.setState({ [`location${stop.code}`]: location })
       this.setLastUpdated()
@@ -49,12 +51,6 @@ class App extends Component {
   setLastUpdated() {
     this.setState({ lastUpdated: moment() })
   }
-
-  // formatPredictions(predictions) {
-  //   if (predictions == null) return '?'
-  //   const minutes = predictions.map(p => `${p.minutes}m`)
-  //   return minutes.join(', ')
-  // }
 
   render() {
     return (
@@ -74,7 +70,7 @@ class App extends Component {
         </Overlay>
 
         <Overlay styles={{ bottom: 0, right: 0, width: 60, height: 20, fontSize: '0.5em' }}>
-          {this.state.lastUpdatedMessage}
+          {this.state.lastUpdatedComponent}
         </Overlay>
 
         {/* Worst possible way to draw a vertical line. */}

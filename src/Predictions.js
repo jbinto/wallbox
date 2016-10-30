@@ -9,7 +9,6 @@ const formatPredictions = (predictions) => {
 export default ({ predictions }) => {
   if (predictions == null) return null
 
-  console.log(`predictions: ${predictions}`)
   const first = _.first(predictions)
   const rest = _.slice(predictions, 1)
 
