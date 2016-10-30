@@ -82,13 +82,16 @@ class App extends Component {
         <div style={{ position: 'absolute', left: 0 }}>
           <Map
             location={this.state.locationE}
+            expectedPrefix={EASTBOUND_PREFIX}
             eastPrefix={EASTBOUND_PREFIX}
             westPrefix={WESTBOUND_PREFIX}
+
           />
         </div>
         <div style={{ position: 'absolute', left: 238 }}>
           <Map
             location={this.state.locationW}
+            expectedPrefix={WESTBOUND_PREFIX}
             eastPrefix={EASTBOUND_PREFIX}
             westPrefix={WESTBOUND_PREFIX}
           />
