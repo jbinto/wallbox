@@ -8,6 +8,7 @@ import getPredictionsAndLocation, {
 } from './get_predictions'
 import Map from './Map'
 import Overlay from './Overlay'
+import Predictions from './Predictions'
 
 class App extends Component {
   constructor(props) {
@@ -49,11 +50,11 @@ class App extends Component {
     this.setState({ lastUpdated: moment() })
   }
 
-  formatPredictions(predictions) {
-    if (predictions == null) return '?'
-    const minutes = predictions.map(p => `${p.minutes}m`)
-    return minutes.join(', ')
-  }
+  // formatPredictions(predictions) {
+  //   if (predictions == null) return '?'
+  //   const minutes = predictions.map(p => `${p.minutes}m`)
+  //   return minutes.join(', ')
+  // }
 
   render() {
     return (
@@ -66,10 +67,10 @@ class App extends Component {
           {STOPS[1].name}
         </Overlay>
         <Overlay styles={{ bottom: 0, left: 0 }}>
-          {this.formatPredictions(this.state.predictionE)}
+          <Predictions predictions={this.state.predictionE} />
         </Overlay>
         <Overlay styles={{ bottom: 0, left: 238 }}>
-          {this.formatPredictions(this.state.predictionW)}
+          <Predictions predictions={this.state.predictionW} />
         </Overlay>
 
         <Overlay styles={{ bottom: 0, right: 0, width: 60, height: 20, fontSize: '0.5em' }}>
