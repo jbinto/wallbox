@@ -32,6 +32,20 @@ const getLocations = async () => {
   )
 }
 
+const getLocation = async (vehicleId) => {
+  const response = await fetch(`http://restbus.info/api/agencies/ttc/vehicles/${vehicleId}`)
+  const vehicle = await response.json()
+  return _.pick(vehicle, [
+    'id',
+    'routeId',
+    'directionId',
+    'predictable',
+    'secsSinceReport',
+    'lat',
+    'lon',
+  ])
+}
+
 const getPredictionsAndLocation = async (stopPredictionURL) => {
   const response = await fetch(stopPredictionURL)
   const json = await response.json()
@@ -44,16 +58,15 @@ const getPredictionsAndLocation = async (stopPredictionURL) => {
   const predictions = values.map((v) => ({
     minutes: v.minutes,
     seconds: v.seconds,
-    vehicle_id: v.vehicle.id,
+    vehicleId: v.vehicle.id,
     title: v.direction.title,
   }))
 
-  const locations = await getLocations()
-  const location = _.find(locations, {
-    // Return the first vehicle   only to keep it simple for now
-    id: predictions[0].vehicle_id
-  })
+  if (predictions.length === 0) return []
 
+  // get location for first prediciton
+  const vehicleId = predictions[0].vehicleId
+  const location = await getLocation(vehicleId)
   return {
     predictions,
     location,
