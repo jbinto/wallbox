@@ -1,19 +1,30 @@
 import React from 'react'
 
-const WIDTH = 400
-const HEIGHT = 100
+const WIDTH = 30
+const HEIGHT = 30
 
 const getLatLng = (o) => ({ lat: parseFloat(o.lat), lng: parseFloat(o.lon) })
 
 
 const Marker = ({ children, style }) => {
   const markerStyle = {
-    display: 'inline-block',
+    // initially any map object has left top corner at lat lng coordinates
+    // it's on you to set object origin to 0,0 coordinates
+    position: 'absolute',
+    width: WIDTH,
+    height: HEIGHT,
+    left: -WIDTH / 2,
+    top: -HEIGHT / 2,
+
+    border: '1px solid #3f51b5',
     fontSize: '24px',
-    padding: '0px 20px',
-    borderRadius: '10px',
-    lineHeight: '0',
+    borderRadius: HEIGHT,
+    textAlign: 'center',
+    color: 'white',
+    padding: 0,
+    margin: 0,
     opacity: '0.55',
+    // backgroundColor: 'black',
     ...style
   };
 
