@@ -9,7 +9,6 @@ import getPredictionsAndLocation, {
 import Map from './Map'
 import Overlay from './Overlay'
 
-
 class App extends Component {
   constructor(props) {
     super(props)
@@ -58,7 +57,7 @@ class App extends Component {
 
   render() {
     return (
-      <div style={{ width: 480, height: 320, overflowX: 'hidden', position: 'relative' }}>
+      <div style={{ width: 480, height: 320, overflow: 'hidden', position: 'relative' }}>
         {/* Absolute positioned layout, omg no stop */}
         <Overlay styles={{ top: 0, left: 0 }}>
           {STOPS[0].name}
